@@ -1,6 +1,6 @@
-package greetring.exercise.controllers;
+package greetring.exercise.controller;
 
-import greetring.exercise.model.Greeting;
+import greetring.exercise.domain.Greeting;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@RequestMapping(GreetingsController.BASE_URL)
 @SuppressWarnings("SpringJavaAutowiringInspection")
 public class GreetingsController
 {
-    public static final String BASE_URL = "/greeting";
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
@@ -24,6 +22,7 @@ public class GreetingsController
         this.greetingList = greetingList;
     }
 
+    //ResponseEntity = status code, headers and body
     @GetMapping("/all")
     public ResponseEntity<List<Greeting>> listAll()
     {
@@ -34,11 +33,7 @@ public class GreetingsController
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /**
-     * The @PathVariable method parameter annotation is used to indicate that a method parameter should be bound to the value of a URI template variable.
-     * @param id
-     * @return  ResponseEntity<Greeting>
-     */
+    ///Use @PathVariable to bound id from URL to method parameter
     @GetMapping("/{id}")
     public ResponseEntity<Greeting> findGreetingById(@PathVariable("id") long id)
     {
@@ -50,11 +45,7 @@ public class GreetingsController
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * @RequestBody maps the request to the model class (Greeting) so you can retrueve or set values from getter and setters
-     * @param greeting
-     * @return ResponseEntity<Greeting>
-     */
+    //Use @RequestBody to map request to domain class
     @PostMapping("/create")
     public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting)
     {
